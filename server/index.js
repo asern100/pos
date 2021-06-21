@@ -9,6 +9,7 @@ const mongoose = require("mongoose")
 
 //routes
 const mealsRoutes = require("./routes/meals")
+const categoriesRoutes = require("./routes/categories")
 
 //middleware
 app.use(helmet())
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.json()); //req.body
 
 app.use('/meals/',mealsRoutes)
+app.use('/categories/',categoriesRoutes)
 
 
 dotenv.config();
