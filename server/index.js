@@ -10,7 +10,7 @@ const mongoose = require("mongoose")
 //routes
 const mealsRoutes = require("./routes/meals")
 const categoriesRoutes = require("./routes/categories")
-
+const subCategoriesRoutes = require("./routes/subCategories")
 //middleware
 app.use(helmet())
 app.use(morgan("common"))
@@ -19,6 +19,7 @@ app.use(express.json()); //req.body
 
 app.use('/meals/',mealsRoutes)
 app.use('/categories/',categoriesRoutes)
+app.use('/subCategories/',subCategoriesRoutes)
 
 
 dotenv.config();

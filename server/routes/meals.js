@@ -1,12 +1,20 @@
 const express = require('express')
 const router = express.Router()
 const Meal = require('../models/Meal');
+const SubCategory = require('../models/SubCategory');
+
 
 router.post("/", async (req, res) => {
     try {     
         const newMeal = new Meal(req.body);
-        const meal = await newMeal.save();
-        res.send(meal)
+        
+        const subCategory = await SubCategory.findById(req.body.subCategoryID)
+        if (subCategory){
+          const meal = await newMeal.save();
+          res.send(meal)
+        } else{
+          res.send('Select Sub Category !')
+        }
       } catch (err) {
         console.error(err.message);
       }

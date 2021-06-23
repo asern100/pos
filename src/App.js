@@ -13,8 +13,10 @@ function App() {
   
 
   const [categories,setCategories] = useState([]);
+  const [subCategories,setSubCategories] = useState([]);
   const [meals,setMeals] = useState([]);
-  const [categorySelected,setCategorySelected] = useState();
+  const [category,setCategory] = useState();
+  const [subCategory,setSubCategory] = useState();
   const [list,setList] = useState([])
   const [total, setToltal]= useState(0)
   
@@ -66,6 +68,10 @@ function App() {
       setCategories(response.data)   
     })
 
+    axios.get("http://localhost:3000/subCategories/").then(response => {
+      setSubCategories(response.data)   
+    })
+
     axios.get("http://localhost:3000/meals/").then(response => {
       setMeals(response.data)   
     })
@@ -101,11 +107,11 @@ function App() {
 
     
     <Row style={{fontFamily: 'Lobster'}}>
-      <Col xs="12" md="2" style={{lineHeight: 3, fontSize: 20}}> 
+      <Col xs="12" md="2"  style={{lineHeight: 3, fontSize: 20}}> 
       {categories.map(category  => 
         <Row xs="1">
         <Col>
-        <Card style={{backgroundColor:"#FFFFFF",height:70, margin:5}} onClick={() => setCategorySelected(category._id)}>
+        <Card style={{backgroundColor:"#FFFFFF",height:70, margin:5}} onClick={() => setCategory(category._id)}>
           <div style={{height:"100%",width:"100%", backgroundImage:`url(${category.image})`, backgroundSize:"100% 100%" , position: "relative"}}>
             <div style={{height:"100%",width:"100%", backgroundColor:"#000", opacity:0.6, position:"absolute" ,zIndex:1}}>
             </div>
@@ -118,10 +124,27 @@ function App() {
         </Row>
       )}
       </Col>
-      <Col xs="12" md="6" style={{lineHeight: 3, fontSize: 40}} >
+      <Col xs="12" md="2"  style={{lineHeight: 3, fontSize: 20}}> 
+      {subCategories.map(subCategory  => (subCategory.categoryID === category) ?
+        <Row xs="1">
+        <Col>
+        <Card style={{backgroundColor:"#FFFFFF",height:70, margin:5}} onClick={() => setSubCategory(subCategory._id)}>
+          <div style={{height:"100%",width:"100%", backgroundImage:`url(${subCategory.image})`, backgroundSize:"100% 100%" , position: "relative"}}>
+            <div style={{height:"100%",width:"100%", backgroundColor:"#000", opacity:0.6, position:"absolute" ,zIndex:1}}>
+            </div>
+            <div style={{ color:"#FFF", position:"absolute" , zIndex:111 ,height:"100%",width:"100%", }}>
+            <span >{subCategory.name}</span>
+            </div>
+          </div>
+        </Card>
+      </Col>
+        </Row> : null
+      )}
+      </Col>
+      <Col xs="12" md="4" style={{lineHeight: 3, fontSize: 40}} >
         
-        <Row md="3"  xs="6">
-          {meals.map(meal  => (meal.categoryID === categorySelected) ? 
+        <Row lg="2"  xs="2">
+          {meals.map(meal  => (meal.subCategoryID === subCategory) ? 
             <Col>
               <Card style={{backgroundColor:"#FFFFFF",height:150, margin:5}} onClick={() => handleSelectMeal({...meal, "quantity":1,})}>
                 <div style={{height:"100%",width:"100%", backgroundImage:`url(${meal.image})`, backgroundSize:"100% 100%" , position: "relative"}}>
@@ -132,7 +155,8 @@ function App() {
                   </div>
                 </div>
               </Card>
-            </Col> : null
+            </Col> : 
+           null
             
           )}
          
