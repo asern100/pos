@@ -307,12 +307,20 @@ function App() {
         )}
         </tbody>
           <tr scope="row" style={{marginTop:2}} >
-            {(total>0) ? <h5>{total} </h5> : null}
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td >
+              {(total>0) ? <h5>{total} </h5> : null}
+            </td>
           </tr>
           <tr scope="row" style={{marginTop:2 }} >
-         {(total>0) ?
-            <Button onClick={() =>alert(size.height)}>Print</Button>
-          : null}
+          
+              {(total>0) ?
+                  <Button onClick={() =>alert(size.height)}>Print</Button>
+                : null}
+          
           </tr>
         </Table>
         </Card>
