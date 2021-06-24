@@ -26,4 +26,16 @@ router.get("/", async (req, res) => {
     
 })
 
+router.get("/:categoryID", async (req, res) => {
+    
+  await Meal.find({"categoryID" : req.params.categoryID}).then( data => res.json(data) ).catch( err => res.json(err) )
+  
+})
+
+router.get("/:subCategoryID", async (req, res) => {
+    
+  await Meal.find({"subCategoryID" : req.params.subCategoryID}).then( data => res.json(data) ).catch( err => res.json(err) )
+  
+})
+
  module.exports = router

@@ -1,13 +1,93 @@
 import './App.css';
 import React, {useState,useEffect, useRef} from 'react'
 import axios from "axios"
-import { Container, Row, Col, Card , Button} from 'reactstrap';
+import { Container,Table,Label, Input , Row, Col, Card , Button,  Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
 
+const NoteModal = (props) => {
+  const {
+    buttonLabel,
+    className,
+    index,
+    addNote,
+  } = props;
+
+  const [modal, setModal] = useState(false);
+  const [note, setNote] = useState("")
+  const toggle = () => setModal(!modal);
+  const submitNote= () => {
+    addNote(note, index)
+    toggle()
+  }
+  return (
+    <div>
+      <Button size="sm" color="danger" onClick={toggle}>{buttonLabel}</Button>
+      <Modal isOpen={modal} toggle={toggle} className={className}>
+        <ModalHeader toggle={toggle}>Create Note</ModalHeader>
+        <ModalBody>
+        <Input type="textarea" name="text" id="exampleText" onChange={(e) => setNote(e.target.value)} />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={submitNote}>Submit</Button>{' '}
+          <Button color="secondary" onClick={toggle}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
+}
+
+const TacosModal = (props) => {
+  const {
+    buttonLabel,
+    className,
+    index,
+    tacos,
+    addTacos,
+  } = props;
+
+  const [modal, setModal] = useState(false);
+  const [tacoSelected, setTacoSelected] = useState([])
+  const toggle = () => setModal(!modal);
+  const submitNote= () => {
+    addTacos(tacoSelected, index)
+    toggle()
+  }
+  const handleChange = (checked, value) => {
+    if(checked){
+      setTacoSelected([...tacoSelected, value])
+    } else {
+      tacoSelected.pop(value)
+    }
+    
+}
+  return (
+    <div>
+      <Button size="sm" color="primary" onClick={toggle}>{buttonLabel}</Button>
+      <Modal isOpen={modal} toggle={toggle} className={className}>
+        <ModalHeader toggle={toggle}>ADD TACOS</ModalHeader>
+        <ModalBody>
+          <Container>
+          {tacos.map(t => 
+            <Row style={{fontFamily:'Lobster'}}>
+            <Label check>
+              <Input type="checkbox" id="checkbox2" onChange={(v)=> handleChange(v.target.checked, t.name)} />{' '}
+                 {t.name}
+            </Label>
+            </Row>)}
+          </Container>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={submitNote}>Submit</Button>{' '}
+          <Button color="secondary" onClick={toggle}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
+}
 
 function App() {
 
-
+  
 
   const size = useWindowSize()
   
@@ -19,7 +99,7 @@ function App() {
   const [subCategory,setSubCategory] = useState();
   const [list,setList] = useState([])
   const [total, setToltal]= useState(0)
-  
+  const [tacos, setTacos] = useState([])
 
   const [counter, setCounter] = useState(1);
   const incrementCounter = (index) => {
@@ -55,13 +135,31 @@ function App() {
       }
     }
   }
+
+  const addNote= (note, index) =>{
+    //alert(note)
+  
+    list[index].note = note
+    //alert(JSON.stringify(list))
+  }
+
+  const addTacos= (tacos, index) =>{
+    //alert(tacos)
+    tacos.forEach(t => {
+      list[index].tacos.push(t)
+    });
+    
+    //alert(JSON.stringify(list))
+  }
+
+
   useEffect(() => {
     let t = 0
    list.map(l => t = t + l.quantity * l.price)
    setToltal(t)
   }, [list, counter])
 
- 
+  
 
   useEffect(() => {
     axios.get("http://localhost:3000/categories/").then(response => {
@@ -74,6 +172,11 @@ function App() {
 
     axios.get("http://localhost:3000/meals/").then(response => {
       setMeals(response.data)   
+    })
+
+
+    axios.get("http://localhost:3000/meals/60d337e361c68016bce1eab4").then(response => {
+      setTacos(response.data)   
     })
   }, [])
 
@@ -107,7 +210,7 @@ function App() {
 
     
     <Row style={{fontFamily: 'Lobster'}}>
-      <Col xs="12" md="2"  style={{lineHeight: 3, fontSize: 20}}> 
+      <Col xs="12" md="2"  > 
       {categories.map(category  => 
         <Row xs="1">
         <Col>
@@ -115,7 +218,7 @@ function App() {
           <div style={{height:"100%",width:"100%", backgroundImage:`url(${category.image})`, backgroundSize:"100% 100%" , position: "relative"}}>
             <div style={{height:"100%",width:"100%", backgroundColor:"#000", opacity:0.6, position:"absolute" ,zIndex:1}}>
             </div>
-            <div style={{ color:"#FFF", position:"absolute" , zIndex:111 ,height:"100%",width:"100%", }}>
+            <div style={{ color:"#FFF", position:"absolute" , zIndex:111 ,height:"100%",width:"100%",display:"flex",justifyContent:"center",  alignItems:'center' }}>
             <span >{category.name}</span>
             </div>
           </div>
@@ -124,7 +227,7 @@ function App() {
         </Row>
       )}
       </Col>
-      <Col xs="12" md="2"  style={{lineHeight: 3, fontSize: 20}}> 
+      <Col xs="12" md="2"  > 
       {subCategories.map(subCategory  => (subCategory.categoryID === category) ?
         <Row xs="1">
         <Col>
@@ -132,7 +235,7 @@ function App() {
           <div style={{height:"100%",width:"100%", backgroundImage:`url(${subCategory.image})`, backgroundSize:"100% 100%" , position: "relative"}}>
             <div style={{height:"100%",width:"100%", backgroundColor:"#000", opacity:0.6, position:"absolute" ,zIndex:1}}>
             </div>
-            <div style={{ color:"#FFF", position:"absolute" , zIndex:111 ,height:"100%",width:"100%", }}>
+            <div style={{ color:"#FFF", position:"absolute" , zIndex:111 ,height:"100%",width:"100%",display:"flex",justifyContent:"center",  alignItems:'center' }}>
             <span >{subCategory.name}</span>
             </div>
           </div>
@@ -141,17 +244,17 @@ function App() {
         </Row> : null
       )}
       </Col>
-      <Col xs="12" md="4" style={{lineHeight: 3, fontSize: 40}} >
+      <Col xs="12" md="4"  >
         
         <Row lg="2"  xs="2">
           {meals.map(meal  => (meal.subCategoryID === subCategory) ? 
             <Col>
-              <Card style={{backgroundColor:"#FFFFFF",height:150, margin:5}} onClick={() => handleSelectMeal({...meal, "quantity":1,})}>
+              <Card style={{backgroundColor:"#FFFFFF",height:70, margin:5}} onClick={() => handleSelectMeal({...meal, "quantity":1,"note":"", "tacos":[]})}>
                 <div style={{height:"100%",width:"100%", backgroundImage:`url(${meal.image})`, backgroundSize:"100% 100%" , position: "relative"}}>
                   <div style={{height:"100%",width:"100%", backgroundColor:"#000", opacity:0.6, position:"absolute" ,zIndex:1}}>
                   </div>
-                  <div style={{ color:"#FFF", position:"absolute" , zIndex:111 ,height:"100%",width:"100%", }}>
-                  <span >{meal.name}</span>
+                  <div style={{ color:"#FFF", position:"absolute" , zIndex:111 ,height:"100%",width:"100%", display:"flex",justifyContent:"center",  alignItems:'center'}}>
+                  <span style={{ fontSize: '1,5rem'}}>{meal.name}</span>
                   </div>
                 </div>
               </Card>
@@ -168,47 +271,50 @@ function App() {
         
         <Card style={{backgroundColor:"#FFFFFF",height:600, margin:5}} >
         <br />
+        <Table>
+        <tbody>
         {list.map((l, index) =>
           
-        <Row xl="1" style={{margin:2}}>
-        <Col>
-            <Row xs={3}>
-             <Col>{l.name}</Col>
+       
+        <tr scope="row" style={{marginTop:2 }}>
+        
+       
+               
+
+                <td >{l.name}</td>
              
-             <Col>
-              <Row xs={3}>
-                <Col >
-                <Button onClick={() => decrementCounter(index)}>-</Button>
-                </Col>
-                <Col>{l.quantity}</Col>
-                <Col >
-                <Button onClick={ () => incrementCounter(index)}>+</Button>
-                </Col>
-              </Row>
-             </Col>
+             
+              
+                <td  >
+                <Button   onClick={() => decrementCounter(index)}>-</Button>
+                </td>
+                <td  >
+                {l.quantity}
+                </td>
+                <td >
+                <Button   onClick={ () => incrementCounter(index)}>+</Button>
+                </td>
+             
 
-             <Col>{l.price * l.quantity}</Col>
-            </Row>
-        </Col>
-        </Row>
+             <td >{l.price * l.quantity}</td>
+             
+              <td ><TacosModal buttonLabel={"tacos"} index={index} addTacos={addTacos} tacos={tacos}/></td>
+              <td ><NoteModal buttonLabel={"note"} index={index} addNote={addNote}/></td>
+            
+             
+            
+        </tr>
         )}
-        <br />
-        <br />
-        <Row>
-          <Col></Col>
-          <Col></Col>
-          <Col>
+        </tbody>
+          <tr scope="row" style={{marginTop:2}} >
             {(total>0) ? <h5>{total} </h5> : null}
-
-          </Col>
-        </Row>
-        <Row>
-         <Col>
+          </tr>
+          <tr scope="row" style={{marginTop:2 }} >
          {(total>0) ?
             <Button onClick={() =>alert(size.height)}>Print</Button>
           : null}
-         </Col>
-        </Row>
+          </tr>
+        </Table>
         </Card>
       </Col>
     </Row>
