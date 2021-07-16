@@ -99,7 +99,9 @@ function App() {
   const [subCategory,setSubCategory] = useState();
   const [list,setList] = useState([])
   const [total, setToltal]= useState(0)
+  const [orderNumber, setOrderNumber] = useState(1)
   const [tacos, setTacos] = useState([])
+
 
   const [counter, setCounter] = useState(1);
   const incrementCounter = (index) => {
@@ -204,7 +206,27 @@ function App() {
     }, []); // Empty array ensures that effect is only run on mount
     return windowSize;
   }
+  const handleOrder = (list) => {
+    list.forEach(order => {
+      delete order.categoryID
+      delete order.subCategoryID
+      delete order.image
+      delete order.__v
+    });
+    alert(JSON.stringify(list))
+    if(list.length) {
+      
+      axios.post('http://localhost:3000/orders/' , {...list, amount:total ,number:orderNumber}).then(res => {
+        if (res.status === 200 ){
+          
+          alert("Order sended !")
+          setOrderNumber(orderNumber+1)
+          setList([])
 
+        }
+      })
+    }
+  }
   return (
     <div className="App" style={{backgroundColor:"#F5F5F5", height:`${size.height}`}}>
 
@@ -271,6 +293,7 @@ function App() {
         
         <Card style={{backgroundColor:"#FFFFFF",height:600, margin:5}} >
         <br />
+        {(list.length) ? <span style={{right:"left"}}>Order Number : {orderNumber}</span> : null}
         <Table>
         <tbody>
         {list.map((l, index) =>
@@ -318,7 +341,7 @@ function App() {
           <tr scope="row" style={{marginTop:2 }} >
           
               {(total>0) ?
-                  <Button onClick={() =>alert(size.height)}>Print</Button>
+                  <Button onClick={() => handleOrder(list)}>Order</Button>
                 : null}
           
           </tr>
