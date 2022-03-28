@@ -1,0 +1,87 @@
+.ticket {
+    width: 100%;
+    background-color: #fff;
+    height: 85vh;
+    padding: 10px;
+    margin: 20px 0 0 10px;
+    border-radius: 10px;
+}
+.ticket .ticket__information {
+    border: 1px solid;
+    height: 90%;
+    box-shadow: 3px 3px 5px;
+    font-family: sans-serif;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.ticket .ticket__information .cafe {
+    margin: 5px auto;
+    text-align: center;
+    font-size: 0.9rem;
+}
+.ticket .ticket__information .cafe .cafe__name {
+    font-size: 1.5rem;
+}
+.ticket .ticket__information .cafe .cafe__number {
+    font-weight: bold;
+}
+.ticket .ticket__information .ticket__table {
+    height: 100%;
+    overflow-y: scroll;
+}
+.ticket .ticket__information .ticket__table table {
+    padding: 5px;
+    font-size: 14px;
+    text-align: left;
+    width: 100%;
+}
+.ticket .ticket__information .ticket__table table th {
+    border: 1px solid;
+    border-left: 0;
+    border-right: 0;
+    border-style: dashed;
+}
+.ticket .ticket__information .ticket__table table tr {
+    text-align: center;
+}
+.ticket .ticket__information .ticket__table table .items__description {
+    columns: 2;
+    text-align: left;
+}
+.ticket .ticket__information .ticket__table table .remove-icon {
+    text-align: center;
+    cursor: pointer;
+}
+.ticket .ticket__information .subtotal {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: right;
+    width: 100%;
+    margin: 10px 0;
+}
+.ticket .ticket__information .subtotal hr {
+    border: 1px solid;
+    border-style: dashed;
+}
+.ticket .ticket__information .subtotal .subtotal__price {
+    margin: 5px 20px;
+}
+.ticket .ticket__actions {
+    width: 100%;
+    border: solid 2px #000;
+    border-radius: 5px;
+    height: 10%;
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+.ticket .ticket__actions button {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-size: 1.5rem;
+}

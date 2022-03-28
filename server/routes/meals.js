@@ -38,4 +38,12 @@ router.get("/:subCategoryID", async (req, res) => {
   
 })
 
+router.put("/:id", async (req, res) => {
+  try {     
+      const meal = Meal.findByIdAndUpdate(req.params.id, {...req.body} ).then( data => res.json(data) ).catch( err => res.json(err) ) 
+    } catch (err) {
+      console.error(err.message);
+    }
+})
+
  module.exports = router

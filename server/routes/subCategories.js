@@ -17,6 +17,14 @@ router.post("/", async (req, res) => {
         console.error(err.message);
       }
  })
+router.put("/:id", async (req, res) => {
+    try {     
+        const subCategory = SubCategory.findByIdAndUpdate(req.params.id, {...req.body} ).then( data => res.json(data) ).catch( err => res.json(err) ) 
+      } catch (err) {
+        console.error(err.message);
+      }
+  })
+
 router.get("/", async (req, res) => {
     
     await SubCategory.find().then( data => res.json(data) ).catch( err => res.json(err) )
