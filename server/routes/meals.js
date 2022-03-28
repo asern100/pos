@@ -45,5 +45,11 @@ router.put("/:id", async (req, res) => {
       console.error(err.message);
     }
 })
-
+router.delete("/:id", async (req, res) => {
+  try {     
+      const meal = Meal.findByIdAndDelete(req.params.id ).then( data => res.json(data) ).catch( err => res.json(err) ) 
+    } catch (err) {
+      console.error(err.message);
+    }
+})
  module.exports = router

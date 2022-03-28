@@ -4,7 +4,7 @@ const Category = require('../models/Category');
 const SubCategory = require('../models/SubCategory');
 
 router.post("/", async (req, res) => {
-    try {     
+    try {
         const newSubCategory = new SubCategory(req.body);
         const parentCategory = await Category.findById(req.body.categoryID)
         if (parentCategory) {
@@ -13,21 +13,30 @@ router.post("/", async (req, res) => {
         } else {
             res.send('No Category selected')
         }
-      } catch (err) {
+    } catch (err) {
         console.error(err.message);
-      }
- })
-router.put("/:id", async (req, res) => {
-    try {     
-        const subCategory = SubCategory.findByIdAndUpdate(req.params.id, {...req.body} ).then( data => res.json(data) ).catch( err => res.json(err) ) 
-      } catch (err) {
-        console.error(err.message);
-      }
-  })
+    }
+})
 
 router.get("/", async (req, res) => {
-    
-    await SubCategory.find().then( data => res.json(data) ).catch( err => res.json(err) )
-    
+
+    await SubCategory.find().then(data => res.json(data)).catch(err => res.json(err))
+
 })
- module.exports = router
+
+router.put("/:id", async (req, res) => {
+    try {
+        const subCategory = SubCategory.findByIdAndUpdate(req.params.id, { ...req.body }).then(data => res.json(data)).catch(err => res.json(err))
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
+router.delete("/:id", async (req, res) => {
+    try {
+        const subCategory = SubCategory.findByIdAndDelete(req.params.id).then(data => res.json(data)).catch(err => res.json(err))
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+module.exports = router

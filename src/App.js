@@ -1,7 +1,8 @@
 import './App.css';
-import React, { useState, useEffect } from 'react'
-import axios from "axios"
-import {  Table,  Row, Col, Card, Button} from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+
+import axios from "axios";
+import { Table, Row, Col, Card, Button } from 'reactstrap';
 
 import AddCategory from './components/AddCategory';
 import AddSubCategory from './components/AddSubCategory';
@@ -12,10 +13,13 @@ import UpdateSubCategory from './components/UpdateSubCategory';
 import UpdateMeal from './components/UpdateMeal';
 
 import DeleteCategory from './components/DeleteCategory';
+import DeleteSubCategory from './components/DeleteSubCategory';
+import DeleteMeal from './components/DeleteMeal';
 import Ticket from './components/Ticket';
 
 import NoteModal from './components/NoteModal';
 import TacosModal from './components/TacosModal';
+import PrintOrder from './components/PrintOrder';
 
 
 
@@ -88,11 +92,12 @@ function App() {
     //alert(JSON.stringify(list))
   }
   axios.get("http://localhost:3000/orders").then(response => {
-      setOrderNumber(response.data.length+1)})
+    setOrderNumber(response.data.length + 1)
+  })
   useEffect(() => {
     axios.get("http://localhost:3000/orders").then(response => {
-      setOrderNumber(response.data.length+1)
-  })
+      setOrderNumber(response.data.length + 1)
+    })
   }, [orderNumber])
 
   useEffect(() => {
@@ -122,7 +127,7 @@ function App() {
     })
   }, [])
 
-  
+
   function useWindowSize() {
     const [windowSize, setWindowSize] = useState({
       width: undefined,
@@ -137,7 +142,7 @@ function App() {
           height: window.innerHeight,
         });
       }
-    
+
       // Add event listener
       window.addEventListener("resize", handleResize);
       // Call handler right away so state gets updated with initial window size
@@ -175,7 +180,7 @@ function App() {
         padding: 10,
         color: "#522E2A"
       }} >
-        <h2>Zina Caffe</h2>
+        <h2>Zina Cafe</h2>
       </div>
       <Row style={{ fontFamily: 'Lobster' }}>
 
@@ -207,6 +212,7 @@ function App() {
               <Col>
                 <Card style={{ backgroundColor: "#FFFFFF", height: 70, margin: 5 }} onClick={() => setSubCategory(subCategory._id)}>
                   <div style={{ height: "100%", width: "100%", backgroundImage: `url(${subCategory.image})`, backgroundSize: "100% 100%", position: "relative" }}>
+                    <DeleteSubCategory subCategory={subCategory} />
                     <UpdateSubCategory subCategory={subCategory} />
                     <div style={{ height: "100%", width: "100%", backgroundColor: "#000", opacity: 0.6, position: "absolute", zIndex: 1 }}>
                     </div>
@@ -227,6 +233,7 @@ function App() {
               <Col>
                 <Card style={{ backgroundColor: "#FFFFFF", height: 70, margin: 5 }} onClick={() => handleSelectMeal({ ...meal, "quantity": 1, "note": "", "tacos": [] })}>
                   <div style={{ height: "100%", width: "100%", backgroundImage: `url(${meal.image})`, backgroundSize: "100% 100%", position: "relative" }}>
+                    <DeleteMeal meal={meal} />
                     <UpdateMeal meal={meal} />
                     <div style={{ height: "100%", width: "100%", backgroundColor: "#000", opacity: 0.6, position: "absolute", zIndex: 1 }}>
                     </div>
@@ -245,8 +252,8 @@ function App() {
 
         </Col>
         <Col xs="12" md="4">
-              
-          <Card style={{ backgroundColor: "#FFFFFF", height: 600, margin: 5 }} >
+
+        <Card style={{ backgroundColor: "#FFFFFF", height: 600, margin: 5 }} >
             <br />
             {(list.length) ? <span style={{ right: "left" }}>Order Number : {orderNumber}</span> : null}
             <Table>
@@ -269,15 +276,15 @@ function App() {
                     <td  >
                       {l.quantity}
                     </td>
-                    <td  className='printCutt' >
+                    <td className='printCutt' >
                       <Button onClick={() => incrementCounter(index)}>+</Button>
                     </td>
 
 
                     <td >{l.price * l.quantity}</td>
 
-                    <td  className='printCutt' ><TacosModal buttonLabel={"tacos"} index={index} addTacos={addTacos} tacos={tacos} /></td>
-                    <td   className='printCutt' ><NoteModal buttonLabel={"note"} index={index} addNote={addNote} /></td>
+                    <td className='printCutt' ><TacosModal buttonLabel={"tacos"} index={index} addTacos={addTacos} tacos={tacos} /></td>
+                    <td className='printCutt' ><NoteModal buttonLabel={"note"} index={index} addNote={addNote} /></td>
 
 
 
@@ -298,19 +305,21 @@ function App() {
                 {(total > 0) ?
                   <>
                     <td className='printCutt'>
-                    <Ticket order={list} total={total} orderNumber={orderNumber} />
+                      <Ticket order={list} total={total} orderNumber={orderNumber} />
                     </td>
                     <td className='printCutt'>
-                    <Button style={{color:"black"}}  onClick={() => handleOrder(list)}>Order</Button>
+                      <Button style={{ color: "black" }} onClick={() => handleOrder(list)}>Order</Button>
                     </td>
-                   
+
                   </> : null}
 
               </tr>
             </Table>
+            
           </Card>
           
         </Col>
+        
       </Row>
 
     </div>
