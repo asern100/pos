@@ -30,12 +30,14 @@ const Ticket = (props) => {
             <Button style={{color:"black"}} onClick={toggle}>Ticket</Button>
             
             
-            <Modal isOpen={modal} toggle={toggle} >
+            <Modal  isOpen={modal} toggle={toggle} >
+                <div className='ticketHeader'>
                 <ModalHeader toggle={toggle}>Ticket</ModalHeader>
+                </div>
                 <ModalBody>
                     
-                    <div className="ticket">
-            <div className="ticket__information">
+                <div className="ticket">
+                <div className="ticket__information">
                 <div className="cafe">
                     
                     
@@ -43,6 +45,7 @@ const Ticket = (props) => {
                     <p>123 Elm St</p>
                     <p>Manar I, TN</p>
                     <p className="cafe__number">216-28-161-030</p>
+                    {new Date().toISOString()}
                     <p className="invoice__number">Invoice #{orderNumber}</p>
                 </div> 
                              

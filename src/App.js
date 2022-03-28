@@ -1,7 +1,7 @@
 import './App.css';
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from "axios"
-import { Container, Table, Label, Input, Row, Col, Card, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {  Table,  Row, Col, Card, Button} from 'reactstrap';
 
 import AddCategory from './components/AddCategory';
 import AddSubCategory from './components/AddSubCategory';
@@ -14,86 +14,10 @@ import UpdateMeal from './components/UpdateMeal';
 import DeleteCategory from './components/DeleteCategory';
 import Ticket from './components/Ticket';
 
-const NoteModal = (props) => {
-  const {
-    buttonLabel,
-    className,
-    index,
-    addNote,
-  } = props;
+import NoteModal from './components/NoteModal';
+import TacosModal from './components/TacosModal';
 
-  const [modal, setModal] = useState(false);
-  const [note, setNote] = useState("")
-  const toggle = () => setModal(!modal);
-  const submitNote = () => {
-    addNote(note, index)
-    toggle()
-  }
-  return (
-    <div>
-      <Button size="sm" color="danger" onClick={toggle}>{buttonLabel}</Button>
-      <Modal isOpen={modal} toggle={toggle} className={className}>
-        <ModalHeader toggle={toggle}>Create Note</ModalHeader>
-        <ModalBody>
-          <Input type="textarea" name="text" id="exampleText" onChange={(e) => setNote(e.target.value)} />
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={submitNote}>Submit</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-    </div>
-  );
-}
 
-const TacosModal = (props) => {
-  const {
-    buttonLabel,
-    className,
-    index,
-    tacos,
-    addTacos,
-  } = props;
-
-  const [modal, setModal] = useState(false);
-  const [tacoSelected, setTacoSelected] = useState([])
-  const toggle = () => setModal(!modal);
-  const submitNote = () => {
-    addTacos(tacoSelected, index)
-    toggle()
-  }
-  const handleChange = (checked, value) => {
-    if (checked) {
-      setTacoSelected([...tacoSelected, value])
-    } else {
-      tacoSelected.pop(value)
-    }
-
-  }
-  return (
-    <div>
-      <Button size="sm" color="primary" onClick={toggle}>{buttonLabel}</Button>
-      <Modal isOpen={modal} toggle={toggle} className={className}>
-        <ModalHeader toggle={toggle}>ADD TACOS</ModalHeader>
-        <ModalBody>
-          <Container>
-            {tacos.map(t =>
-              <Row style={{ fontFamily: 'Lobster' }}>
-                <Label check>
-                  <Input type="checkbox" id="checkbox2" onChange={(v) => handleChange(v.target.checked, t.name)} />{' '}
-                  {t.name}
-                </Label>
-              </Row>)}
-          </Container>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={submitNote}>Submit</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-    </div>
-  );
-}
 
 function App() {
 
@@ -321,7 +245,7 @@ function App() {
 
         </Col>
         <Col xs="12" md="4">
-
+              
           <Card style={{ backgroundColor: "#FFFFFF", height: 600, margin: 5 }} >
             <br />
             {(list.length) ? <span style={{ right: "left" }}>Order Number : {orderNumber}</span> : null}
@@ -339,21 +263,21 @@ function App() {
 
 
 
-                    <td  >
+                    <td className='printCutt' >
                       <Button onClick={() => decrementCounter(index)}>-</Button>
                     </td>
                     <td  >
                       {l.quantity}
                     </td>
-                    <td >
+                    <td  className='printCutt' >
                       <Button onClick={() => incrementCounter(index)}>+</Button>
                     </td>
 
 
                     <td >{l.price * l.quantity}</td>
 
-                    <td ><TacosModal buttonLabel={"tacos"} index={index} addTacos={addTacos} tacos={tacos} /></td>
-                    <td ><NoteModal buttonLabel={"note"} index={index} addNote={addNote} /></td>
+                    <td  className='printCutt' ><TacosModal buttonLabel={"tacos"} index={index} addTacos={addTacos} tacos={tacos} /></td>
+                    <td   className='printCutt' ><NoteModal buttonLabel={"note"} index={index} addNote={addNote} /></td>
 
 
 
@@ -373,10 +297,10 @@ function App() {
 
                 {(total > 0) ?
                   <>
-                    <td>
+                    <td className='printCutt'>
                     <Ticket order={list} total={total} orderNumber={orderNumber} />
                     </td>
-                    <td>
+                    <td className='printCutt'>
                     <Button style={{color:"black"}}  onClick={() => handleOrder(list)}>Order</Button>
                     </td>
                    
@@ -385,6 +309,7 @@ function App() {
               </tr>
             </Table>
           </Card>
+          
         </Col>
       </Row>
 
